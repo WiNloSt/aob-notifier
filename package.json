@@ -1,0 +1,11 @@
+{
+  "name": "aob-notifier",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "author": "Mahatthana Nomsawadi",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.1",
+    "isomorphic-fetch": "^2.2.1"
+  }
+}
