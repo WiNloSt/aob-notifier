@@ -53,8 +53,9 @@ const fetchOnePlus5Price = async () => {
 const toPhoneObject = text => text.match(/(.*)(\d{2},\d{3})/).slice(1)
 
 const async = async () => {
+  let data
   try {
-    const data = await fetchOnePlus5Price()
+    data = await fetchOnePlus5Price()
   } catch (error) {
     console.error('error', error)
     client.quit()
