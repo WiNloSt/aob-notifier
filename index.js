@@ -10,14 +10,13 @@ const client = redis.createClient({
 
 const getData = () => {
   return new Promise((resolve, reject) => {
-    let data = {}
     client.get('data', (err, reply) => {
       if (err) {
         console.error('error', err)
         reject(err)
       }
 
-      data = JSON.parse(reply.toString())
+      const data = JSON.parse(reply.toString())
       resolve(data)
     })
   })
