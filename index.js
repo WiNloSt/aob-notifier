@@ -54,7 +54,14 @@ const fetchOnePlus5Price = async () => {
 const toPhoneObject = text => text.match(/(.*)(\d{2},\d{3})/).slice(1)
 
 const async = async () => {
-  const data = await fetchOnePlus5Price()
+  try {
+    const data = await fetchOnePlus5Price()
+  } catch (error) {
+    console.error('error', error)
+    client.quit()
+    return
+  }
+
   if (isValueUpdated) {
     console.log('updating data file and posting to Line')
     console.log(data)
