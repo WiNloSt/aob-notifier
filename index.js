@@ -2,7 +2,18 @@ const fetch = require('isomorphic-fetch')
 const cheerio = require('cheerio')
 const fs = require('fs')
 
-const data = JSON.parse(fs.readFileSync('oneplus5-data.txt', 'utf8'))
+const getDataFromFile = () => {
+  let data = {}
+  try {
+    data = JSON.parse(fs.readFileSync('oneplus5-data.txt', 'utf8'))
+  } catch (e) {
+    console.error('file not exist')
+  }
+
+  return data
+}
+const data = getDataFromFile()
+
 let isValueUpdated = false
 
 const fetchOnePlus5Price = async () => {
@@ -19,7 +30,7 @@ const fetchOnePlus5Price = async () => {
     const [variant, price] = result
     const cleanedVariant = variant.split(' ').map(a => a.trim()).filter(a => a).join(' ').slice(0, -1)
     const priceNumber = +price.replace(',', '')
-    if (priceNumber < data[cleanedVariant]) {
+    if (priceNumber < data[cleanedVariant] || data[cleanedVariant] == undefined) {
       data[cleanedVariant] = +price.replace(',', '')
       isValueUpdated = true
     }
