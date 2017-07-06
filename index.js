@@ -1,18 +1,27 @@
 const fetch = require('isomorphic-fetch')
 const cheerio = require('cheerio')
 const fs = require('fs')
+const redis = require('redis')
+const REDIS_URL = process.env.REDIS_URL
 
-const getDataFromFile = () => {
-  let data = {}
-  try {
-    data = JSON.parse(fs.readFileSync('oneplus5-data.txt', 'utf8'))
-  } catch (e) {
-    console.error('file not exist')
-  }
+const client = redis.createClient({
+  url: REDIS_URL
+})
 
-  return data
+const getData = () => {
+  return new Promise((resolve, reject) => {
+    let data = {}
+    client.get('data', (err, reply) => {
+      if (err) {
+        console.error('error', err)
+        reject(err)
+      }
+
+      data = JSON.parse(reply.toString())
+      resolve(data)
+    })
+  })
 }
-const data = getDataFromFile()
 
 let isValueUpdated = false
 
@@ -26,6 +35,9 @@ const fetchOnePlus5Price = async () => {
   const onePlusArray = []
   $onePlus5Line.each((idx, el) => onePlusArray.push($(el).text()))
   const results = onePlusArray.map(toPhoneObject)
+
+  let data = await getData()
+  console.log('data is', data)
   results.forEach(result => {
     const [variant, price] = result
     const cleanedVariant = variant.split(' ').map(a => a.trim()).filter(a => a).join(' ').slice(0, -1)
@@ -35,14 +47,18 @@ const fetchOnePlus5Price = async () => {
       isValueUpdated = true
     }
   })
+
+  return data
 }
 
 const toPhoneObject = text => text.match(/(.*)(\d{2},\d{3})/).slice(1)
 
 const async = async () => {
-  await fetchOnePlus5Price()
+  const data = await fetchOnePlus5Price()
   if (isValueUpdated) {
-    fs.writeFileSync('oneplus5-data.txt', JSON.stringify(data),'utf8')
+    console.log('updating data file and posting to Line')
+    console.log(data)
+    client.set('data', JSON.stringify(data))
     fetch(process.env.IFTTT_WEBHOOK_URL, {
       method: 'POST',
       headers: {
@@ -56,3 +72,6 @@ const async = async () => {
 }
 
 async()
+  .then(() => {
+    client.quit()
+  })

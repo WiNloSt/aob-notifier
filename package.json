@@ -6,7 +6,8 @@
   "author": "Mahatthana Nomsawadi",
   "dependencies": {
     "cheerio": "^1.0.0-rc.1",
-    "isomorphic-fetch": "^2.2.1"
+    "isomorphic-fetch": "^2.2.1",
+    "redis": "^2.7.1"
   },
   "engines": {
     "node": "8.1.3"
