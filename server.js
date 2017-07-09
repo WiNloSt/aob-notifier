@@ -22,11 +22,7 @@ server.route({
       }
 
       const data = JSON.parse(res.toString())
-      reply(Object.keys(data)
-        .map(key =>
-        `${key}: ${data[key]}`
-        ).join('<br/>')
-      )
+      reply(getPrettyObjectString(data))
     })
   }
 })
@@ -41,7 +37,7 @@ server.route({
     events.forEach(event => {
       if (event.message.text.match(/ราคา/)) {
         const data = await fetchOnePlus5Price()
-        replyMessage(event.replyToken, data)
+        replyMessage(event.replyToken, getPrettyObjectString(data))
         continue
       }
       replyMessage(event.replyToken, `you said: ${event.message.text}`)
@@ -55,3 +51,9 @@ server.start((err) => {
   }
   console.log(`Server running at: ${server.info.uri}`)
 })
+
+const getPrettyObjectString = objectString =>
+  Object.keys(data)
+    .map(key =>
+    `${key}: ${data[key]}`
+    ).join('<br/>')
