@@ -22,7 +22,7 @@ server.route({
       }
 
       const data = JSON.parse(res.toString())
-      reply(getPrettyObjectString(data))
+      reply(getPrettyObjectString(data, '<br>'))
     })
   }
 })
@@ -52,8 +52,8 @@ server.start((err) => {
   console.log(`Server running at: ${server.info.uri}`)
 })
 
-const getPrettyObjectString = object =>
+const getPrettyObjectString = (object, separator = '\n') =>
   Object.keys(object)
     .map(key =>
     `${key}: ${object[key]}`
-    ).join('<br/>')
+    ).join(separator)
