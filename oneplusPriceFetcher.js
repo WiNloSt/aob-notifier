@@ -45,7 +45,7 @@ const processOnePlus5Price = async client => {
     if (priceNumber < data[cleanedVariant] || data[cleanedVariant] == undefined) {
       data[cleanedVariant] = +price.replace(',', '')
       isValueUpdated = true
-      writeData(data)
+      writeData(client, data)
     }
   })
 
