@@ -34,7 +34,7 @@ server.route({
   path: '/',
   handler: (request, reply) => {
     reply(request.payload)
-    console.log(request.payload)
+    console.log(JSON.stringify(request.payload, null, 2))
   }
 })
 
