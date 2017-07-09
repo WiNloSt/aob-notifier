@@ -41,7 +41,7 @@ server.route({
         replyMessage(event.replyToken, getPrettyObjectString(data))
         return
       }
-      replyMessage(event.replyToken, `you said: ${event.message.text}`)
+      // replyMessage(event.replyToken, `you said: ${event.message.text}`)
     })
   }
 })
