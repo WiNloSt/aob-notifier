@@ -4,11 +4,11 @@ const fs = require('fs')
 const redis = require('redis')
 const REDIS_URL = process.env.REDIS_URL
 
-const client = redis.createClient({
-  url: REDIS_URL
-})
-
 const getData = () => {
+  const client = redis.createClient({
+    url: REDIS_URL
+  })
+
   return new Promise((resolve, reject) => {
     client.get('data', (err, reply) => {
       if (err) {
@@ -19,7 +19,20 @@ const getData = () => {
       const data = JSON.parse(reply.toString())
       resolve(data)
     })
+  }).then(data => {
+    client.quit()
+    return data
   })
+}
+
+const writeData = data => {
+   const client = redis.createClient({
+    url: REDIS_URL
+  })
+
+  console.log('updating price data')  
+  client.set('data', JSON.stringify(data))
+  client.quit()
 }
 
 let isValueUpdated = false
@@ -44,7 +57,7 @@ const fetchOnePlus5Price = async () => {
     if (priceNumber < data[cleanedVariant] || data[cleanedVariant] == undefined) {
       data[cleanedVariant] = +price.replace(',', '')
       isValueUpdated = true
-      client.set('data', JSON.stringify(data))
+      writeData(data)
     }
   })
 

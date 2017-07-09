@@ -2,6 +2,7 @@ const Hapi = require('hapi')
 const redis = require('redis')
 const { replyMessage } = require('./line')
 const { fetchOnePlus5Price } = require('./oneplusPriceFetcher')
+const { getPrettyObjectString } = require('./utils')
 
 const client = redis.createClient({
   url: process.env.REDIS_URL
@@ -51,9 +52,3 @@ server.start((err) => {
   }
   console.log(`Server running at: ${server.info.uri}`)
 })
-
-const getPrettyObjectString = (object, separator = '\n') =>
-  Object.keys(object)
-    .map(key =>
-    `${key}: ${object[key]}`
-    ).join(separator)

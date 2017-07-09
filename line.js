@@ -16,3 +16,15 @@ exports.replyMessage = (replyToken, message) =>
     .catch((err) => {
       console.error('error occured', err)
     })
+
+exports.pushMessage = (receiverId, message) =>
+  client.pushMessage(receiverId, {
+    type: 'text',
+    text: message
+  })
+    .then(() => {
+      console.log('success')
+    })
+    .catch((err) => {
+      console.error('error occured', err)
+    })
