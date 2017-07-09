@@ -1,6 +1,7 @@
 const Hapi = require('hapi')
 const redis = require('redis')
 const { replyMessage } = require('./line')
+const { fetchOnePlus5Price } = require('./oneplusPriceFetcher')
 
 const client = redis.createClient({
   url: process.env.REDIS_URL
@@ -33,11 +34,16 @@ server.route({
 server.route({
   method: 'POST',
   path: '/',
-  handler: (request, reply) => {
+  handler: async (request, reply) => {
     reply(request.payload)
     console.log(JSON.stringify(request.payload, null, 2))
     const { events } = request.payload
     events.forEach(event => {
+      if (event.message.text.match(/ราคา/)) {
+        const data = await fetchOnePlus5Price()
+        replyMessage(event.replyToken, data)
+        continue
+      }
       replyMessage(event.replyToken, `you said: ${event.message.text}`)
     })
   }
