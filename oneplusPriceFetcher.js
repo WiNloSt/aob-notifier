@@ -4,11 +4,7 @@ const fs = require('fs')
 const redis = require('redis')
 const REDIS_URL = process.env.REDIS_URL
 
-const getData = () => {
-  const client = redis.createClient({
-    url: REDIS_URL
-  })
-
+const fetchOnePlus5Price = client => {
   return new Promise((resolve, reject) => {
     client.get('data', (err, reply) => {
       if (err) {
@@ -19,25 +15,17 @@ const getData = () => {
       const data = JSON.parse(reply.toString())
       resolve(data)
     })
-  }).then(data => {
-    client.quit()
-    return data
   })
 }
 
-const writeData = data => {
-   const client = redis.createClient({
-    url: REDIS_URL
-  })
-
+const writeData = (client, data) => {
   console.log('updating price data')  
   client.set('data', JSON.stringify(data))
-  client.quit()
 }
 
 let isValueUpdated = false
 
-const fetchOnePlus5Price = async () => {
+const processOnePlus5Price = async client => {
   const response = await fetch('http://www.aobmobile.net/wc/')
   const DOMString = await response.text()
   const $ = cheerio.load(DOMString)
@@ -48,7 +36,7 @@ const fetchOnePlus5Price = async () => {
   $onePlus5Line.each((idx, el) => onePlusArray.push($(el).text()))
   const results = onePlusArray.map(toPhoneObject)
 
-  let data = await getData()
+  let data = await fetchOnePlus5Price(client)
   console.log('data is', data)
   results.forEach(result => {
     const [variant, price] = result
@@ -69,4 +57,5 @@ const fetchOnePlus5Price = async () => {
 
 const toPhoneObject = text => text.match(/(.*)(\d{2},\d{3})/).slice(1)
 
+exports.processOnePlus5Price = processOnePlus5Price
 exports.fetchOnePlus5Price = fetchOnePlus5Price

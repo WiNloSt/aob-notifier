@@ -16,15 +16,9 @@ server.connection({
 server.route({
   method: 'GET',
   path: '/',
-  handler: function (request, reply) {
-    client.get('data', (err, res) => {
-      if (err) {
-        console.error('error', err)
-      }
-
-      const data = JSON.parse(res.toString())
-      reply(getPrettyObjectString(data, '<br>'))
-    })
+  handler: async (request, reply) => {
+    const data = await fetchOnePlus5Price(client)
+    reply(getPrettyObjectString(data, '<br>'))
   }
 })
 
@@ -35,7 +29,7 @@ server.route({
     reply(request.payload)
     console.log(JSON.stringify(request.payload, null, 2))
     const { events } = request.payload
-    const { updated, data } = await fetchOnePlus5Price()
+    const data = await fetchOnePlus5Price(client)
     events.forEach(event => {
       if (event.message.text.match(/ราคา/)) {
         replyMessage(event.replyToken, getPrettyObjectString(data))
