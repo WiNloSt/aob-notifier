@@ -34,11 +34,11 @@ server.route({
     reply(request.payload)
     console.log(JSON.stringify(request.payload, null, 2))
     const { events } = request.payload
+    const { updated, data } = await fetchOnePlus5Price()
     events.forEach(event => {
       if (event.message.text.match(/ราคา/)) {
-        const data = await fetchOnePlus5Price()
         replyMessage(event.replyToken, getPrettyObjectString(data))
-        continue
+        return
       }
       replyMessage(event.replyToken, `you said: ${event.message.text}`)
     })
