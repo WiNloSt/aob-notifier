@@ -38,7 +38,7 @@ server.route({
     console.log(JSON.stringify(request.payload, null, 2))
     const { events } = request.payload
     events.forEach(event => {
-      replyMessage(event.replyToken, 'hello world')
+      replyMessage(event.replyToken, `you said: ${event.message.text}`)
     })
   }
 })
