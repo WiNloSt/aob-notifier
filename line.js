@@ -8,7 +8,7 @@ const client = new line.Client({
 exports.replyMessage = (replyToken, message) =>
   client.replyMessage(replyToken, {
     type: 'text',
-    text: 'Hello World! from Mamegoma bot\nnew line!!!'
+    text: message
   })
     .then(() => {
       console.log('success')
