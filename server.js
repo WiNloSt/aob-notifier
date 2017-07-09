@@ -1,5 +1,6 @@
 const Hapi = require('hapi')
 const redis = require('redis')
+const { replyMessage } = require('./line')
 
 const client = redis.createClient({
   url: process.env.REDIS_URL
@@ -35,6 +36,10 @@ server.route({
   handler: (request, reply) => {
     reply(request.payload)
     console.log(JSON.stringify(request.payload, null, 2))
+    const { events } = request.payload
+    events.forEach(event => {
+      replyMessage(event.replyToken, 'hello world')
+    })
   }
 })
 
