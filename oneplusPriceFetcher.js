@@ -56,10 +56,4 @@ const fetchOnePlus5Price = async () => {
 
 const toPhoneObject = text => text.match(/(.*)(\d{2},\d{3})/).slice(1)
 
-exports.fetchOnePlus5Price = () =>
-  fetchOnePlus5Price()
-    .then(data => {
-      client.quit()
-      return data
-    })
-    .catch(error => client.quit())
+exports.fetchOnePlus5Price = fetchOnePlus5Price
