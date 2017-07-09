@@ -52,8 +52,8 @@ server.start((err) => {
   console.log(`Server running at: ${server.info.uri}`)
 })
 
-const getPrettyObjectString = objectString =>
-  Object.keys(data)
+const getPrettyObjectString = object =>
+  Object.keys(object)
     .map(key =>
-    `${key}: ${data[key]}`
+    `${key}: ${object[key]}`
     ).join('<br/>')
