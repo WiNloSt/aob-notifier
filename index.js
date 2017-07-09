@@ -10,7 +10,10 @@ const async = async () => {
     console.log('posting to Line')
     console.log(data)
     const receiverId = process.env.LINE_GROUP_ID
-    pushMessage(receiverId, getPrettyObjectString(data))
+    pushMessage(receiverId,`
+New price detected!!
+${getPrettyObjectString(data)}
+`)
   }
 }
 
