@@ -1,4 +1,3 @@
-const fetch = require('isomorphic-fetch')
 const redis = require('redis')
 
 const { processOnePlus5Price } = require('./oneplusPriceFetcher')
@@ -10,14 +9,13 @@ const client = redis.createClient({
 })
 
 const async = async () => {
-  
   const { updated, data } = await processOnePlus5Price(client)
 
   if (updated) {
     console.log('posting to Line')
     console.log(data)
     const receiverId = process.env.LINE_GROUP_ID
-    pushMessage(receiverId,`
+    pushMessage(receiverId, `
 New price detected!!
 ${getPrettyObjectString(data)}
 `)
