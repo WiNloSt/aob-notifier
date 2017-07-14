@@ -36,7 +36,7 @@ server.route({
         replyMessage(
           event.replyToken,
           R.compose(
-            objectString => `Last Updated: ${new Date(lastUpdate)}\n${objectString}`,
+            objectString => `Last Updated: ${new Date(lastUpdate).toLocaleString('en-US', { timeZone: 'Asia/Bangkok' })}\n${objectString}`,
             getPrettyObjectString
           )(data)
         )
