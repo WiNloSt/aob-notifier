@@ -36,7 +36,7 @@ server.route({
         replyMessage(
           event.replyToken,
           R.compose(
-            objectString => `Last Updated: ${lastUpdate}\n${objectString}`,
+            objectString => `Last Updated: ${new Date(lastUpdate)}\n${objectString}`,
             getPrettyObjectString
           )(data)
         )
