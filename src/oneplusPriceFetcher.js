@@ -1,9 +1,9 @@
 const fetch = require('isomorphic-fetch')
 const cheerio = require('cheerio')
 
-const fetchOnePlus5Price = client => {
+const fetchDataFromKey = (client, key) => {
   return new Promise((resolve, reject) => {
-    client.get('data', (err, reply) => {
+    client.get(key, (err, reply) => {
       if (err) {
         console.error('error', err)
         reject(err)
@@ -33,7 +33,7 @@ const processOnePlus5Price = async client => {
   $onePlus5Line.each((idx, el) => onePlusArray.push($(el).text()))
   const results = onePlusArray.map(toPhoneObject)
 
-  let data = await fetchOnePlus5Price(client)
+  let data = await fetchDataFromKey(client, 'data')
   console.log('data is', data)
   results.forEach(result => {
     const [variant, price] = result
@@ -43,6 +43,7 @@ const processOnePlus5Price = async client => {
       data[cleanedVariant] = +price.replace(',', '')
       isValueUpdated = true
       writeData(client, 'data', data)
+      writeData(client, 'lastUpdate', Date.now())
     }
   })
 
@@ -55,4 +56,4 @@ const processOnePlus5Price = async client => {
 const toPhoneObject = text => text.match(/(.*)(\d{2},\d{3})/).slice(1)
 
 exports.processOnePlus5Price = processOnePlus5Price
-exports.fetchOnePlus5Price = fetchOnePlus5Price
+exports.fetchDataFromKey = fetchDataFromKey

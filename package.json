@@ -9,6 +9,7 @@
     "cheerio": "^1.0.0-rc.1",
     "hapi": "^16.4.3",
     "isomorphic-fetch": "^2.2.1",
+    "ramda": "^0.24.1",
     "redis": "^2.7.1"
   },
   "engines": {
@@ -26,7 +27,7 @@
     "nodemon": "^1.11.0"
   },
   "scripts": {
-    "dev": "nodemon server.js",
+    "dev": "nodemon src/server.js",
     "test": "eslint src",
     "precommit": "yarn test"
   }
