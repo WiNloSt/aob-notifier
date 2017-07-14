@@ -15,9 +15,9 @@ const fetchOnePlus5Price = client => {
   })
 }
 
-const writeData = (client, data) => {
+const writeData = (client, key, data) => {
   console.log('updating price data')
-  client.set('data', JSON.stringify(data))
+  client.set(key, JSON.stringify(data))
 }
 
 let isValueUpdated = false
@@ -42,7 +42,7 @@ const processOnePlus5Price = async client => {
     if (priceNumber < data[cleanedVariant] || data[cleanedVariant] == null) {
       data[cleanedVariant] = +price.replace(',', '')
       isValueUpdated = true
-      writeData(client, data)
+      writeData(client, 'data', data)
     }
   })
 
