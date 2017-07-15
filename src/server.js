@@ -41,7 +41,7 @@ server.route({
           event.replyToken,
           R.compose(
             addLastUpdate(lastUpdate, '\n'),
-            getPrettyObjectString
+            R.curry(getPrettyObjectString)(R.__, '\n')
           )(data)
         )
       }
