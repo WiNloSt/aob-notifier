@@ -5,9 +5,7 @@ const { fetchDataFromKey } = require('./oneplusPriceFetcher')
 const { getPrettyObjectString } = require('./utils')
 const R = require('ramda')
 
-const client = redis.createClient({
-  url: process.env.REDIS_URL
-})
+const client = redis.createClient(process.env.REDIS_URL)
 
 const server = new Hapi.Server()
 server.connection({
