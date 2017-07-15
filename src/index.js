@@ -17,7 +17,7 @@ const async = async () => {
     const receiverId = process.env.LINE_GROUP_ID
     pushMessage(receiverId, `
 New price detected!!
-${getPrettyObjectString(data)}
+${getPrettyObjectString(data, '\n')}
 `)
   }
 }

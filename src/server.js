@@ -17,7 +17,13 @@ server.route({
   path: '/',
   handler: async (request, reply) => {
     const data = await fetchDataFromKey(client, 'data')
-    reply(getPrettyObjectString(data, '<br>'))
+    const lastUpdate = await fetchDataFromKey(client, 'lastUpdate')
+    reply(
+      R.compose(
+        addLastUpdate(lastUpdate, '<br>'),
+        R.curry(getPrettyObjectString)(R.__, '<br>')
+      )(data)
+    )
   }
 })
 
@@ -30,11 +36,11 @@ server.route({
     const data = await fetchDataFromKey(client, 'data')
     const lastUpdate = await fetchDataFromKey(client, 'lastUpdate')
     events.forEach(event => {
-      if (event.message.text.match(/ราคา/)) {
+      if (event.message.text.match(/????/)) {
         replyMessage(
           event.replyToken,
           R.compose(
-            objectString => `Last Updated: ${new Date(lastUpdate).toLocaleString('en-US', { timeZone: 'Asia/Bangkok' })}\n${objectString}`,
+            addLastUpdate(lastUpdate, '\n'),
             getPrettyObjectString
           )(data)
         )
@@ -44,6 +50,9 @@ server.route({
     reply(request.payload)
   }
 })
+
+const addLastUpdate = (lastUpdate, separator) => objectString =>
+  `Last Updated: ${new Date(lastUpdate).toLocaleString('en-US', { timeZone: 'Asia/Bangkok' }) + separator + objectString}`
 
 server.start((err) => {
   if (err) {

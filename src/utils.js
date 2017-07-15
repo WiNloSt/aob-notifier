@@ -1,4 +1,4 @@
-const getPrettyObjectString = (object, separator = '\n') =>
+const getPrettyObjectString = (object, separator) =>
   Object.keys(object)
     .map(key => `${key}: ${object[key]}`)
     .join(separator)
