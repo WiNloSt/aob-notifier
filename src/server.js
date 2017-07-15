@@ -36,7 +36,7 @@ server.route({
     const data = await fetchDataFromKey(client, 'data')
     const lastUpdate = await fetchDataFromKey(client, 'lastUpdate')
     events.forEach(event => {
-      if (event.message.text.match(/????/)) {
+      if (event.message.text.match(/ราคา/)) {
         replyMessage(
           event.replyToken,
           R.compose(
